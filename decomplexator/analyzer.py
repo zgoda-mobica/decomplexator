@@ -59,7 +59,7 @@ class ComplexityAnalyzer:
         self._summary = ret
         return ret
 
-    def persist(self, filename):
+    def persist(self, filename=None):
         if not self.has_data():
             return
         data = self.summary()
@@ -96,7 +96,7 @@ class AnalyzerGroup:
             data.update(analyzer.summary())
         return data
 
-    def persist(self, filename):
+    def persist(self, filename=None):
         storage = load_previous_scores(filename)
         for python_fname in self.files:
             an = self.analyzers[python_fname]

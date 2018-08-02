@@ -4,7 +4,7 @@ import argparse
 
 from .analyzer import AnalyzerGroup
 from .report import ComplexityReport
-from .utils import persist, clear_storage, load_previous_scores
+from .utils import clear_storage, load_previous_scores
 
 
 def make_parser():
@@ -39,7 +39,7 @@ def _analyze_files(filenames, continuous):
     group.analyze()
     summary = group.summary()
     if continuous:
-        persist(group)
+        group.persist()
     return summary
 
 

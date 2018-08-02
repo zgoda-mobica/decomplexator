@@ -28,10 +28,11 @@ setup(
     tests_require=[
         'pytest',
         'pytest-mock',
+        'pytest-cov',
     ],
     entry_points={
         'console_scripts': [
-            'cog=cog.run:main'
+            'decomplexator=decomplexator.run:main'
         ]
     },
     classifiers=(

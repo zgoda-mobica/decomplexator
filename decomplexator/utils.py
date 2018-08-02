@@ -25,10 +25,6 @@ def normalize_fname(fn):
     return path.normpath(path.abspath(fn))
 
 
-def persist(obj, filename=None):
-    obj.persist(get_storage_path(filename))
-
-
 def clear_storage(filename=None):
     os.remove(get_storage_path(filename))
 
