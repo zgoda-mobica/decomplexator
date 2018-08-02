@@ -20,7 +20,6 @@ setup(
     install_requires=[
         'redbaron',
         'mccabe',
-        'xdg',
     ],
     setup_requires=[
         'pytest-runner',

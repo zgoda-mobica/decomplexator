@@ -26,7 +26,7 @@ class ComplexityAnalyzer:
         self.cyclomatic = self._cyclomatic(self.filename)
 
     def has_data(self):
-        return self.cognitive and self.cyclomatic
+        return bool(self.cognitive and self.cyclomatic)
 
     def _cyclomatic(self, filename):
         with open(filename, 'r') as fp:

@@ -3,8 +3,6 @@ from os import path
 import pickle
 from collections import namedtuple, Mapping
 
-import xdg
-
 
 STORAGE_FNAME = 'cog.pickle'
 
@@ -16,7 +14,7 @@ ComplexityChange = namedtuple('ComplexityChange', ['cognitive', 'cyclomatic'])
 def get_storage_path(filename=None):
     if filename is None:
         filename = STORAGE_FNAME
-    storage_dir = xdg.XDG_DATA_HOME
+    storage_dir = os.environ.get('XDG_DATA_HOME', path.expanduser(path.join('~', '.local', 'share')))
     return normalize_fname(path.join(storage_dir, filename))
 
 

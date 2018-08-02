@@ -1,3 +1,3 @@
-from dcx.run import main
+from decomplexator.run import main
 
 main()
