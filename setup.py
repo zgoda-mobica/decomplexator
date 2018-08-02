@@ -22,6 +22,13 @@ setup(
         'mccabe',
         'xdg',
     ],
+    setup_requires=[
+        'pytest-runner',
+    ],
+    tests_require=[
+        'pytest',
+        'pytest-mock',
+    ],
     entry_points={
         'console_scripts': [
             'cog=cog.run:main'
