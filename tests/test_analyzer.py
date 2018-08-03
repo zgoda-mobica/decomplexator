@@ -132,3 +132,74 @@ class TestAnalyzerGroup(AnalyzerBaseTests):
         grp = AnalyzerGroup()
         grp.add_files(self.FILE_NAMES)
         assert len(grp.files) == len(self.FILE_NAMES)
+
+    def test_analyze(self, mocker):
+        fake_analyzer = mocker.MagicMock()
+        fake_analyzer.analyze = mocker.MagicMock()
+        mocker.patch('decomplexator.analyzer.ComplexityAnalyzer', fake_analyzer)
+        grp = AnalyzerGroup(self.FILE_NAMES)
+        grp.analyze()
+        assert len(grp.analyzers) == len(self.FILE_NAMES)
+        fake_analyzer.analyze.call_count == len(self.FILE_NAMES)
+
+    def test_summary(self, mocker):
+        complexity = self._gen_complexity(self.DT_FMT)
+        file_names = list(complexity.keys())
+        fake_analyzer = mocker.MagicMock()
+        fake_analyzer.summary = mocker.MagicMock(return_value=complexity)
+        mocker.patch('decomplexator.analyzer.ComplexityAnalyzer', fake_analyzer)
+        grp = AnalyzerGroup(file_names)
+        grp.summary()
+        fake_analyzer.summary.call_count == len(file_names)
+
+    def test_summary_live_data(self, mocker):
+        mock_open = mocker.mock_open(read_data=self.FILE_CONTENT)
+        mocker.patch('builtins.open', mock_open)
+        mocker.patch.dict('os.environ', self._environ())
+        ca = ComplexityAnalyzer()
+        ca.analyze(self.DUMMY_PATH)
+        summary_single = ca.summary()
+        grp = AnalyzerGroup([self.DUMMY_PATH])
+        grp.analyze()
+        summary_group = grp.summary()
+        assert len(summary_single) == len(summary_group)
+        assert sorted(summary_single.keys()) == sorted(summary_group.keys())
+
+    def test_summary_no_files(self, mocker):
+        fake_analyzer = mocker.MagicMock()
+        fake_analyzer.summary = mocker.MagicMock()
+        mocker.patch('decomplexator.analyzer.ComplexityAnalyzer', fake_analyzer)
+        grp = AnalyzerGroup(self.FILE_NAMES)
+        data = grp.summary()
+        assert len(data) == 0
+
+    def test_persist_no_previous_data(self, mocker):
+        fake_load = mocker.MagicMock(return_value={})
+        mocker.patch('decomplexator.analyzer.load_previous_scores', fake_load)
+        fake_save = mocker.MagicMock()
+        mocker.patch('decomplexator.analyzer.save_scores', fake_save)
+        fake_open = mocker.mock_open(read_data=self.FILE_CONTENT)
+        mocker.patch('builtins.open', fake_open)
+        mocker.patch.dict('os.environ', self._environ())
+        grp = AnalyzerGroup([self.FILE_NAME])
+        grp.analyze()
+        grp.persist()
+        fake_save.assert_called_once_with(grp.summary(), mocker.ANY)
+
+    def test_persist_check_analyzer_has_data(self, mocker):
+        fake_load = mocker.MagicMock(return_value={})
+        mocker.patch('decomplexator.analyzer.load_previous_scores', fake_load)
+        fake_save = mocker.MagicMock()
+        mocker.patch('decomplexator.analyzer.save_scores', fake_save)
+        fake_analyzer = mocker.MagicMock()
+        fake_analyzer.has_data = mocker.MagicMock(return_value=True)
+        fake_analyzer.summary = mocker.MagicMock(return_value={self.DUMMY_PATH: {'x': 'file data'}})
+        mocker.patch('decomplexator.analyzer.ComplexityAnalyzer', fake_analyzer)
+        fake_open = mocker.mock_open()
+        mocker.patch('builtins.open', fake_open)
+        mocker.patch.dict('os.environ', self._environ())
+        grp = AnalyzerGroup([self.DUMMY_PATH])
+        grp.analyze()
+        grp.persist()
+        save_args, _ = fake_save.call_args
+        assert list(save_args[0].keys())[0] == self.DUMMY_PATH
