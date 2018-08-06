@@ -17,8 +17,8 @@ class AnalyzerBaseTests(BaseTests):
     FILE_NAME = 'test1.py'
     DUMMY_PATH = os.path.join('/dummy', FILE_NAME)
     FILE_CONTENT = open(_path('data', FILE_NAME)).read()
-    DT = datetime(2018, 8, 2, 12, 22, 15, 0)
-    DT_FMT = DT.isoformat()
+    DT = datetime(2018, 8, 2, 12, 22)
+    DT_FMT = DT.isoformat(timespec='minutes')
     COMPLEXITY = {
         DUMMY_PATH: {
             DT_FMT: {
