@@ -55,7 +55,7 @@ def print_report(scores, continuous):
         for k, v in scores.items():
             v.update(data.get(k, {}))
     report = ComplexityReport(scores)
-    report.print_report(continuous)
+    report.print_report(continuous=continuous)
 
 
 def main():

@@ -1,5 +1,3 @@
-import os
-from datetime import datetime
 import random
 
 from decomplexator.analyzer import ComplexityAnalyzer, AnalyzerGroup
@@ -7,27 +5,7 @@ from decomplexator.analyzer import ComplexityAnalyzer, AnalyzerGroup
 from tests import BaseTests
 
 
-def _path(*elem):
-    here = os.path.dirname(__file__)
-    return os.path.abspath(os.path.join(here, *elem))
-
-
 class AnalyzerBaseTests(BaseTests):
-
-    FILE_NAME = 'test1.py'
-    DUMMY_PATH = os.path.join('/dummy', FILE_NAME)
-    FILE_CONTENT = open(_path('data', FILE_NAME)).read()
-    DT = datetime(2018, 8, 2, 12, 22)
-    DT_FMT = DT.isoformat(timespec='minutes')
-    COMPLEXITY = {
-        DUMMY_PATH: {
-            DT_FMT: {
-                'fun1': (0, 1, 'fun1'),
-                'fun2': (1, 2, 'fun2'),
-            },
-        },
-    }
-    MAX_COMPLEXITY = 10
 
     def _gen_complexity(cls, date, num_records=2, max_entries_per_record=2):
         ret = {}

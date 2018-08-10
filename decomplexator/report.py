@@ -9,22 +9,27 @@ class ComplexityReport:
     def __init__(self, scores):
         self.scores = scores
 
-    def print_report(self, continuous=False):
+    def print_report(self, continuous=False, print_it=True):
         lines = []
         for filename, filedata in self.scores.items():
             if continuous:
-                report_lines = self._continuous_report_lines(filename, filedata)
+                report_lines = self.continuous_report_lines(filename, filedata)
             else:
-                report_lines = self._report_lines(filename, filedata)
+                report_lines = self.report_lines(filename, filedata)
             if report_lines:
                 lines.extend(report_lines)
-        for line in lines:
-            print(line)
+        if print_it:
+            for line in lines:
+                print(line)
+        else:
+            return lines
 
-    def _file_header(self, filename):
+    @staticmethod
+    def file_header(filename):
         return ['\n', filename, '=' * len(filename)]
 
-    def _changes(self, node, cur, prev):
+    @staticmethod
+    def calc_changes(node, cur, prev):
         if prev is None:
             return ComplexityChange(0, 0)
         missing = NodeComplexity(cognitive=0, cyclomatic=0, name='missing')
@@ -32,7 +37,7 @@ class ComplexityReport:
         cognitive_change = cur[node].cognitive - prev.get(node, missing).cognitive
         return ComplexityChange(cognitive_change, cyclomatic_change)
 
-    def _continuous_report_lines(self, filename, filedata):
+    def continuous_report_lines(self, filename, filedata):
         available = sorted(filedata.keys())
         latest = filedata[available[-1]]
         previous = None
@@ -41,9 +46,9 @@ class ComplexityReport:
         node_names = sorted(latest.keys())
         if not node_names:
             return
-        lines = self._file_header(filename)
+        lines = self.file_header(filename)
         for node_name in node_names:
-            change = self._changes(node_name, latest, previous)
+            change = self.calc_changes(node_name, latest, previous)
             line = self.FMT_CONT.\
                 format(
                     node_name, latest[node_name].cyclomatic, change.cyclomatic,
@@ -52,7 +57,7 @@ class ComplexityReport:
             lines.append(line)
         return lines
 
-    def _report_lines(self, filename, filedata):
+    def report_lines(self, filename, filedata):
         available = sorted(filedata.keys())
         latest = filedata[available[-1]]
         node_names = sorted(latest.keys())

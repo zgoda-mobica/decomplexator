@@ -4,7 +4,7 @@ This single package joins forces of McCabe and Campbell to provide both cyclomat
 
 ## Invocation
 
-```
+```shell
 usage: run.py [-h] [-i FILENAME] [-d PROJECT_DIR] [-c] [--clear]
 
 Python code complexity analyzer
@@ -25,6 +25,10 @@ The program should work on Windows although it has been tested only on Linux and
 ## Internals
 
 Data is stored in `$XDG_DATA_HOME/cog.pickle`. According to [XDG spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html), this is equivalent to `$HOME/.local/share`.
+
+## Known limitations
+
+* redbaron chokes on some new Python 3 syntax features, like star in an atom
 
 ## Licensing
 

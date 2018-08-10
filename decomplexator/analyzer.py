@@ -42,7 +42,7 @@ class ComplexityAnalyzer:
     def summary(self):
         if self._summary is not None:
             return self._summary
-        key = datetime.utcnow().isoformat()
+        key = datetime.utcnow().isoformat(timespec='seconds')
         nodes = set(self.cognitive.keys())
         nodes.update(self.cyclomatic.keys())
         ret = {
