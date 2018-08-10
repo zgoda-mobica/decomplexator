@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 
+from decomplexator.utils import NodeComplexity
+
 
 def _path(*elem):
     here = os.path.dirname(__file__)
@@ -20,12 +22,11 @@ class BaseTests:
     COMPLEXITY = {
         DUMMY_PATH: {
             DT_FMT: {
-                'fun1': (0, 1, 'fun1'),
-                'fun2': (1, 2, 'fun2'),
+                'fun1': NodeComplexity(0, 1, 'fun1'),
+                'fun2': NodeComplexity(1, 2, 'fun2'),
             },
         },
     }
-    MAX_COMPLEXITY = 10
 
     @classmethod
     def _environ(cls):

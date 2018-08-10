@@ -63,7 +63,7 @@ class ComplexityReport:
         node_names = sorted(latest.keys())
         if not node_names:
             return
-        lines = self._file_header(filename)
+        lines = self.file_header(filename)
         for node_name in node_names:
             line = self.FMT_SIMPLE.\
                 format(node_name, latest[node_name].cyclomatic, latest[node_name].cognitive)

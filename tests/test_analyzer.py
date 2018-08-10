@@ -7,6 +7,8 @@ from tests import BaseTests
 
 class AnalyzerBaseTests(BaseTests):
 
+    MAX_COMPLEXITY = 10
+
     def _gen_complexity(cls, date, num_records=2, max_entries_per_record=2):
         ret = {}
         for i in range(num_records):
