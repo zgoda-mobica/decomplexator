@@ -94,6 +94,8 @@ class TestReport(BaseTests):
         rp = ComplexityReport(self.COMPLEXITY)
         lines = rp.continuous_report_lines(self.DUMMY_PATH, self.COMPLEXITY[self.DUMMY_PATH])
         assert len(lines) == 2 + self.FILE_HEADER_LEN
+        out = ' '.join(lines)
+        assert out.count('(+0)') == 4
 
     def test_simple_lines_no_data(self):
         data = copy.deepcopy(self.COMPLEXITY[self.DUMMY_PATH])
@@ -106,3 +108,5 @@ class TestReport(BaseTests):
         rp = ComplexityReport(self.COMPLEXITY)
         lines = rp.report_lines(self.DUMMY_PATH, self.COMPLEXITY[self.DUMMY_PATH])
         assert len(lines) == 2 + self.FILE_HEADER_LEN
+        out = ' '.join(lines)
+        assert out.count('(+0)') == 0
