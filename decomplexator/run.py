@@ -31,10 +31,10 @@ def make_parser():
 
 
 def analyze_file(fname, continuous):
-    return _analyze_files([fname], continuous)
+    return analyze_files([fname], continuous)
 
 
-def _analyze_files(filenames, continuous):
+def analyze_files(filenames, continuous):
     group = AnalyzerGroup(filenames)
     group.analyze()
     summary = group.summary()
@@ -46,7 +46,7 @@ def _analyze_files(filenames, continuous):
 def analyze_directory(dirname, continuous):
     dir_path = path.abspath(path.join(dirname, '**', '*.py'))
     files = [path.join(dirname, fn) for fn in glob.iglob(dir_path, recursive=True)]
-    return _analyze_files(files, continuous)
+    return analyze_files(files, continuous)
 
 
 def print_report(scores, continuous):
@@ -58,7 +58,7 @@ def print_report(scores, continuous):
     report.print_report(continuous=continuous)
 
 
-def main():
+def main():  # pragma: nocover
     parser = make_parser()
     args = parser.parse_args()
     if args.clear:
